@@ -10,19 +10,19 @@ tags: [AI, Agents, Coding Agents, Memory, Agent Harness]
 
 很多 agent eval 默认世界是静态的。任务条件固定，软件环境固定，用户偏好固定，文档和 API 也像被冻结一样。真实工作流完全不同。一个仓库会改约定，一个工具会换参数，一个用户会修正偏好，一个终端环境会多出新状态。agent 如果只会把旧信息存进 memory，很容易把过期事实当成当前事实。
 
-EvoArena 就是围绕这个问题做的 benchmark。它把环境变化建模成 progressive updates，覆盖三个域：terminal、software、social preference。agent 要完成的不是单个静态任务，而是在一连串变化里保持对当前环境的理解。
+EvoArena 就是围绕这个问题做的 benchmark。它把环境变化建模成 progressive updates，覆盖三个域：terminal、software、social preference。agent 要在一连串变化里保持对当前环境的理解，而不能停留在最初那版任务设定里。
 
-论文的另一个核心是 **EvoMem**。它把 memory 做成 patch-based update history。也就是说，memory 不只是一个事实仓库，而是带有变化记录的结构：之前是什么，后来改了什么，为什么这条信息现在应该覆盖旧假设。
+论文的另一个核心是 **EvoMem**。它把 memory 做成 patch-based update history。也就是说，memory 里不只放事实，还要保留变化记录：之前是什么，后来改了什么，为什么这条信息现在应该覆盖旧假设。
 
 这个设计很适合 long-running agents。
 
 OpenClaw 这种系统里，workspace instructions、skills、project files、user preference、tool behavior 都会变化。如果 agent 只记住最后一句规则，它会丢掉规则的来龙去脉。如果它只检索相似历史，它可能把旧约束捞回来误用。更靠谱的 memory 应该知道"这条规则什么时候被改过"、"新规则覆盖了哪个旧规则"、"某个失败是因为环境变了还是模型没理解"。
 
-实验结果也说明当前 agent 在这个问题上很弱。论文报告说，current agents 在 EvoArena 上平均只有 39.6% accuracy。EvoMem 的改进幅度不算夸张，但方向有价值：EvoArena 平均提升 1.5%，GAIA 提升 6.1%，LoCoMo 提升 4.8%，chain-level accuracy 提升 3.7%。更重要的是，它把"memory evolution"变成了可以测量的对象。
+实验结果也说明当前 agent 在这个问题上很弱。论文报告说，current agents 在 EvoArena 上平均只有 39.6% accuracy。EvoMem 的改进幅度不算夸张，但方向有价值：EvoArena 平均提升 1.5%，GAIA 提升 6.1%，LoCoMo 提升 4.8%，chain-level accuracy 提升 3.7%。更重要的是，它让"memory evolution"进入了可测量范围。
 
 今天另外两篇也很值得放在同一条线上看。
 
-**Toward Instructions-as-Code** 研究的是 coding agents 里的 instruction files。开发者现在会写 AGENTS.md、CLAUDE.md、Cursor rules、Copilot instructions，告诉 agent 怎么找代码、怎么跑测试、遵守什么 convention、PR 该怎么做。这些文件看起来像文档，但它们实际上正在变成 coding agent 的 control plane。
+**Toward Instructions-as-Code** 研究的是 coding agents 里的 instruction files。开发者现在会写 AGENTS.md、CLAUDE.md、Cursor rules、Copilot instructions，告诉 agent 怎么找代码、怎么跑测试、遵守什么 convention、PR 该怎么做。这些文件看起来像文档，实际承担的是 coding agent 的 control plane。
 
 这篇的价值在于，它把 instruction files 当成软件工程 artifact 来看。既然 instruction 会影响 agentic PR quality，那它就需要 versioning、evaluation、debugging 和 review。对 OpenClaw 来说，这个角度非常直接。workspace instruction、skill、hard rule、project memory，本质上都是 instructions-as-code。
 
@@ -41,7 +41,7 @@ EvoArena 说，memory 要能追踪环境变化。Instructions-as-Code 说，repo
 ### 1) EvoArena: Tracking Memory Evolution for Robust LLM Agents in Dynamic Environments
 - 链接: https://arxiv.org/abs/2606.13681
 - 摘要速读: 提出 EvoArena，用动态 terminal、software、social-preference 环境评估 agent，并提出 patch-based memory history 方法 EvoMem。
-- 为什么重要: 它把 agent memory 的核心问题从"存什么"推进到"怎么记录变化"。
+- 为什么重要: 它把 agent memory 的关键问题讲清楚了：既要存事实，也要记录变化。
 
 ### 2) Toward Instructions-as-Code: Understanding the Impact of Instruction Files on Agentic Pull Requests
 - 链接: https://arxiv.org/abs/2606.13449
@@ -51,7 +51,7 @@ EvoArena 说，memory 要能追踪环境变化。Instructions-as-Code 说，repo
 ### 3) HarnessBridge: Learnable Bidirectional Controller for LLM Agent Harness
 - 链接: https://arxiv.org/abs/2606.12882
 - 摘要速读: 提出 learnable controller 来调节 LLM agent 和 harness/environment 之间的交互。
-- 为什么重要: agent harness 不再只是外围脚手架，它正在变成可优化的核心层。
+- 为什么重要: agent harness 是可优化的核心层，会直接影响上下文、动作接口和错误恢复。
 
 ## 一句话结论
 
