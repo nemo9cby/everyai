@@ -10,11 +10,11 @@ tags: [AI, LLM Agents, Post-training, Coding Agents, Software Engineering, Evalu
 
 答案没有那么简单。
 
-训练一个 LM agent 不是让它写几个脚本就结束。真正的工作链条很长：它要规划下一轮实验，构造和 benchmark 对齐的数据，启动稳定的训练任务，评估 checkpoint，把实验状态保存下来，还要在数小时的交互里不丢上下文。
+训练一个 LM agent，复杂度远超过写几个脚本。真正的工作链条很长：它要规划下一轮实验，构造和 benchmark 对齐的数据，启动稳定的训练任务，评估 checkpoint，把实验状态保存下来，还要在数小时的交互里不丢上下文。
 
 这正是 AutoTrainess 的出发点。
 
-作者没有把 agent 直接扔进 raw CLI 环境，而是把 post-training 过程拆成一组更明确的 **agent-computer interfaces**：planning、data preparation、training、evaluation、logging。每一类操作都带有 workflow、rule 和 execution constraint。
+作者没有把 agent 直接扔进 raw CLI 环境。他把 post-training 过程拆成一组更明确的 **agent-computer interfaces**：planning、data preparation、training、evaluation、logging。每一类操作都带有 workflow、rule 和 execution constraint。
 
 这件事很关键。
 
